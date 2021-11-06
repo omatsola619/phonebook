@@ -1,7 +1,11 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
+const cors = require('cors')
 
 app.use(express.json());
+app.use(morgan("tiny"));
+app.use(cors())
 
 let persons = [
   {
@@ -28,7 +32,6 @@ let persons = [
 
 app.get("/", (request, response) => {
   response.send("<h1>hello world how are you doing today</h1>");
-  console.log(persons.map((p) => p.name));
 });
 
 app.get("/api/persons", (request, response) => {
@@ -94,6 +97,10 @@ app.post("/api/persons", (request, response) => {
 
   persons = persons.concat(person);
   response.json(person);
+});
+
+morgan.token("host", (request, response) => {
+  console.log(request.headers);
 });
 
 const PORT = 3001;
